@@ -1,15 +1,19 @@
-from fabric.api import *
-import fabric.contrib.project as project
+# coding=utf8
+
 import os
 import shutil
 import sys
-import SocketServer
+import socketserver
+from datetime import datetime
 
+import fabric.contrib.project as project
+from fabric.api import *
 from pelican.server import ComplexHTTPRequestHandler
 
 # Local path configuration (can be absolute or relative to fabfile)
 env.deploy_path = 'output'
 DEPLOY_PATH = env.deploy_path
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 # Remote server configuration
 production = 'root@localhost:22'
@@ -48,7 +52,7 @@ def serve():
     """Serve site at http://localhost:8000/"""
     os.chdir(env.deploy_path)
 
-    class AddressReuseTCPServer(SocketServer.TCPServer):
+    class AddressReuseTCPServer(socketserver.TCPServer):
         allow_reuse_address = True
 
     server = AddressReuseTCPServer(('', PORT), ComplexHTTPRequestHandler)
@@ -90,3 +94,16 @@ def gh_pages():
     """Publish to GitHub Pages"""
     rebuild()
     local("ghp-import -b {github_pages_branch} {deploy_path} -p".format(**env))
+
+def new_post(name=''):
+    now = datetime.now()
+    md = open(os.path.join(
+        PROJECT_ROOT, 'content',
+        now.strftime('%Y-%m-%d') + '-' + name.strip().replace(' ', '-') + '.md'), 'w')
+    md.write((
+        'Title: %s\n' + 'Author: alswl\n' + 'Slug: %s\n' + 'Date: %s\n' +
+        'Tags: \nCategory: \n'
+    ) % (
+        name, name.replace(' ', '-'),
+        now.strftime('%Y-%m-%d %H:%M:%S')))
+    md.close()

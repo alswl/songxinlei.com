@@ -1,2 +1,4 @@
-pelican markdown
+pelican
+markdown
 fabric
+ghp-import
