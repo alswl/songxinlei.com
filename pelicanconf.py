@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 AUTHOR = 'songxinlei'
 SITENAME = 'songxinlei.com'
 SITEURL = ''
+STATIC_PATHS = ['CNAME']
 
 PATH = 'content'
 
