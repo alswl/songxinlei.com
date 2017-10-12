@@ -1,4 +1,8 @@
-pelican
-markdown
-fabric
-ghp-import
+pelican==3.7.1
+#fabric==1.14.0
+fabric3==1.13.1.post1
+beautifulsoup4==4.6.0
+markdown==2.6.8
+pycrypto==2.6.1
+ghp-import==0.5.5
+
